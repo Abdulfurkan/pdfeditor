@@ -3,18 +3,19 @@
 import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
-import PDFUploader from './components/pdf-editor/PDFUploader';
-import AdSpace from './components/ads/AdSpace';
-import Footer from './components/common/Footer';
+import { PDFDocument } from 'pdf-lib';
+import AdSpace from '../components/ads/AdSpace';
+import Footer from '../components/common/Footer';
+import PDFUploader from '../components/pdf-editor/PDFUploader';
 import Link from 'next/link';
 
-// Dynamically import PDFEditor to avoid SSR issues
-const PDFEditor = dynamic(
-  () => import('./components/pdf-editor/PDFEditor'),
+// Dynamically import PDFRemover to avoid SSR issues
+const PDFRemover = dynamic(
+  () => import('../components/pdf-editor/PDFRemover'),
   { ssr: false }
 );
 
-export default function Home() {
+export default function RemovePages() {
   const [pdfFile, setPdfFile] = useState(null);
   const [pdfName, setPdfName] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -24,7 +25,22 @@ export default function Home() {
     if (pdfFile && pdfFile.url) {
       URL.revokeObjectURL(pdfFile.url);
     }
-    setPdfFile(file);
+    
+    // Create a new blob URL to ensure it's always fresh
+    const pdfBlob = new Blob([file.file], { type: 'application/pdf' });
+    const pdfUrl = URL.createObjectURL(pdfBlob);
+    
+    // Add a unique timestamp to force reload
+    const uniqueUrl = `${pdfUrl}#t=${Date.now()}`;
+    
+    // Create a modified file object with the unique URL
+    const fileWithUniqueUrl = {
+      ...file,
+      url: uniqueUrl,
+      forceReload: true // Add a flag to indicate this file should force reload
+    };
+    
+    setPdfFile(fileWithUniqueUrl);
   };
 
   const handleReset = () => {
@@ -54,15 +70,15 @@ export default function Home() {
           </div>
           <nav className="hidden md:flex items-center">
             <div className="relative mx-2">
-              <Link href="/" className="px-4 py-2 font-medium text-blue-600 relative group">
+              <Link href="/" className="px-4 py-2 font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
                 Crop PDF
-                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transition-all duration-300"></span>
+                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
               </Link>
             </div>
             <div className="relative mx-2">
-              <Link href="/remove-pages" className="px-4 py-2 font-medium text-gray-700 hover:text-blue-600 transition-colors relative group">
+              <Link href="/remove-pages" className="px-4 py-2 font-medium text-blue-600 relative group">
                 Remove Pages
-                <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-blue-600 group-hover:w-full transition-all duration-300"></span>
+                <span className="absolute bottom-0 left-0 w-full h-0.5 bg-blue-600 transition-all duration-300"></span>
               </Link>
             </div>
           </nav>
@@ -95,14 +111,14 @@ export default function Home() {
             <div className="flex flex-col py-2">
               <Link 
                 href="/" 
-                className="px-6 py-3 text-blue-600 font-medium border-l-4 border-blue-600"
+                className="px-6 py-3 text-gray-700 hover:text-blue-600 hover:bg-gray-50 border-l-4 border-transparent hover:border-blue-600 transition-all duration-200"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Crop PDF
               </Link>
               <Link 
                 href="/remove-pages" 
-                className="px-6 py-3 text-gray-700 hover:text-blue-600 hover:bg-gray-50 border-l-4 border-transparent hover:border-blue-600 transition-all duration-200"
+                className="px-6 py-3 text-blue-600 font-medium border-l-4 border-blue-600"
                 onClick={() => setMobileMenuOpen(false)}
               >
                 Remove Pages
@@ -131,11 +147,11 @@ export default function Home() {
       <main className="flex-1 container mx-auto px-4 py-8">
         {/* Top Ad Space */}
         <AdSpace type="banner" className="mb-8" />
-
+        
         {!pdfFile ? (
-          <PDFUploader onFileSelected={handleFileSelected} />
+          <PDFUploader onFileSelected={handleFileSelected} pageType="remove" />
         ) : (
-          <PDFEditor file={pdfFile} onReset={handleReset} />
+          <PDFRemover file={pdfFile} onReset={handleReset} />
         )}
       </main>
 

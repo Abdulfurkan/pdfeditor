@@ -629,45 +629,6 @@ export default function PDFEditor({ file, onReset }) {
 
   return (
     <div className="w-full bg-gray-50 min-h-screen">
-      {/* Top Navigation Bar */}
-      <div className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
-        <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <h1 className="text-xl font-bold text-blue-600">PDF Editor</h1>
-            <button
-              className="text-gray-600 hover:text-blue-600 transition-colors"
-              onClick={handleReset}
-            >
-              <span className="flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M9.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L7.414 9H15a1 1 0 110 2H7.414l2.293 2.293a1 1 0 010 1.414z" />
-                </svg>
-                Upload New
-              </span>
-            </button>
-          </div>
-          <div className="flex items-center space-x-2">
-            <button
-              className={`${cropApplied
-                ? 'bg-blue-500 text-white animate-pulse'
-                : 'bg-white text-gray-700 hover:bg-gray-100'} 
-                text-sm rounded border border-gray-300 px-3 py-1.5 flex items-center transition-colors`}
-              onClick={downloadPDF}
-              disabled={!pdfFile}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M3 13.4V3.6c0-.89.11-1.6 1-1.6h6c.89 0 1 .71 1 1.6v9.8c0 .89-.11 1.6-1 1.6H4a1 1 0 01-1-1.6z" />
-                <path d="M2 6h3" />
-                <path d="M14 6h3" />
-                <path d="M14 16v-4" />
-                <path d="M14 3v4" />
-              </svg>
-              {cropApplied ? 'Download Cropped PDF' : 'Download'}
-            </button>
-          </div>
-        </div>
-      </div>
-
       {/* Top Ad Banner */}
       <div className="container mx-auto px-4 py-4">
         <AdSpace type="banner" className="mb-4 rounded-lg overflow-hidden shadow-sm" />

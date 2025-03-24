@@ -1,26 +1,86 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --foreground: #333;
+  --background: #f5f5f5;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --foreground: #ffffff;
+    --background: #171717;
   }
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* PDF Viewer Styles */
+.react-pdf__Document {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.react-pdf__Page {
+  margin: 0 !important;
+  padding: 0 !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.react-pdf__Page__canvas {
+  display: block;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  max-width: 100% !important;
+  height: auto !important;
+  object-fit: contain !important;
+}
+
+.react-pdf__Page__textContent {
+  display: none;
+}
+
+/* Custom cursor styles */
+.cursor-crosshair {
+  cursor: crosshair !important;
+}
+
+/* Thumbnail styles */
+.thumbnail-document {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.thumbnail-document .react-pdf__Page {
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: white;
+}
+
+/* Add a subtle background to thumbnail containers */
+.thumbnail-document > div {
+  background-color: white;
+  border-radius: 4px;
+  padding: 8px;
+  margin-bottom: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+/* Ensure page number text is clearly visible */
+.thumbnail-document .text-sm {
+  color: #1f2937; /* text-gray-800 equivalent */
+  font-weight: 500;
+  margin-top: 6px;
 }
